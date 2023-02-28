@@ -1,10 +1,14 @@
 <?php
 
+use App\Controllers\ProductController;
+use App\Models\Product;
+
 include "vendor/autoload.php";
 
-$product = new App\Models\Product();
+$productController = new ProductController();
 
-$product->setTitle('title');
+$p = new Product(1, ';ll', 'kjkj', 0);
 
-echo $product->getTitle();
+$productController->index($p);
+
 

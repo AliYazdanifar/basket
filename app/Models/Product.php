@@ -6,32 +6,26 @@ namespace App\Models;
 
 class Product
 {
+    private $id;
     private $title;
     private $price;
     private $discount;
 
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title)
+
+    public function __construct($id, $title, $price, $discount)
     {
+        $this->id = $id;
         $this->title = $title;
-    }
-
-    /**
-     * @param mixed $price
-     */
-    public function setPrice($price)
-    {
         $this->price = $price;
+        $this->discount = $discount;
     }
 
     /**
-     * @param mixed $discount
+     * @return mixed
      */
-    public function setDiscount($discount)
+    public function getId()
     {
-        $this->discount = $discount;
+        return $this->id;
     }
 
     /**
@@ -57,7 +51,6 @@ class Product
     {
         return $this->discount;
     }
-
 
 
 }
