@@ -4,11 +4,11 @@
 namespace App\Storages\Contracts;
 
 
-use App\Models\Product;
-
 interface BasketStorageContract
 {
-    public function insert(array $product, int $quantity);
+    public function insert($product, int $quantity);
+
+    public function insertGroup(array $products, int $quantity, int $discount = 0);
 
     public function remove(int $id);
 
