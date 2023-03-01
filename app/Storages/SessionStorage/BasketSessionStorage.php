@@ -53,6 +53,22 @@ class BasketSessionStorage implements BasketStorageContract
         return true;
     }
 
+    public function getAllItems()
+    {
+        if (isset($_SESSION[$this->basket]))
+            return $_SESSION[$this->basket];
+        return [];
+    }
+
+    private function handleQuantity(array $product, $quantity)
+    {
+
+        if (isset($_SESSION[$this->basket][$product['id']]['quantity']))
+            $quantity += $_SESSION[$this->basket][$product['id']]['quantity'];
+
+        return $quantity;
+    }
+
     public function insertGroup(array $products, int $quantity, int $discount = 0)
     {
 
@@ -79,13 +95,14 @@ class BasketSessionStorage implements BasketStorageContract
         return $_SESSION[$this->basket][$id];
     }
 
-    private function handleQuantity(array $product, $quantity)
+    private function handleId($products)
     {
+        $id = 'sum-';
+        foreach ($products as $key => $product) {
+            $id .= $product['id'];
+        }
 
-        if (isset($_SESSION[$this->basket][$product['id']]['quantity']))
-            $quantity += $_SESSION[$this->basket][$product['id']]['quantity'];
-
-        return $quantity;
+        return $id;
     }
 
     private function handleGroupQuantity($groupId, $quantity)
@@ -96,16 +113,6 @@ class BasketSessionStorage implements BasketStorageContract
         else
             $_SESSION[$this->basket][$groupId]['quantity'] = $quantity;
 
-    }
-
-    private function handleId($products)
-    {
-        $id = 'sum-';
-        foreach ($products as $key => $product) {
-            $id .= $product['id'];
-        }
-
-        return $id;
     }
 
     public function remove(int $id)
@@ -123,35 +130,30 @@ class BasketSessionStorage implements BasketStorageContract
 
     public function getTotalPrice()
     {
-        $products = $this->getAllItems();
-        $sum = 0;
-        foreach ($products as $key => $prd) {
+        $sum = $this->getSum();
 
-            if (substr($key, 0, 3) == 'sum') {
-                foreach ($prd as $k => $v) {
-                    if ($k == 'price') {
-                        $sum += $v;
-                    }
-                }
-            } else {
-                print_r($prd['price']);
-                die();
-                $sum += $prd['price'];
-            }
-
-        }
-        print_r($sum);
-        die();
         return $sum;
 
     }
 
-    public function getAllItems()
+    private function getSum()
     {
-        if (isset($_SESSION[$this->basket]))
-            return $_SESSION[$this->basket];
-        return [];
+        $products = $this->getAllItems();
+        $sum = 0;
+        foreach ($products as $key => $product) {
+            if (substr($key, 0, 3) == 'sum') {
+                foreach ($product as $v) {
+                    if (is_array($v)) {
+                        foreach ($v as $kk => $vv) {
+                            if ($kk == 'price')
+                                $sum += $vv;
+                        }
+                    }
+                }
+            } else {
+                $sum += $product['price'];
+            }
+        }
+        return $sum;
     }
-
-
 }
