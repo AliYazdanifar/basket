@@ -25,15 +25,15 @@ class ProductController
         $this->dd($products);
     }
 
-    public function createProduct(Product $product)
+    public function create(Product $product)
     {
         $validator = $this->validate($product);
         if (!$validator['status'])
-            echo $validator['msg'];
+            $this->dd($validator['msg']);
 
+        return $product->create();
 
     }
-
 
     public function validate(Product $product)
     {
@@ -67,5 +67,10 @@ class ProductController
             'msg' => 'OK'
         ];
 
+    }
+
+    public function destroy(Product $product)
+    {
+        $product->destroy();
     }
 }

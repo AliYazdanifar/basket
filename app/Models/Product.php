@@ -4,13 +4,15 @@
 namespace App\Models;
 
 
+use App\Storages\SessionStorage\ProductSessionStorage;
+
 class Product
 {
+    public $storage;
     private $id;
     private $title;
     private $price;
     private $discount;
-
 
     public function __construct($id, $title, $price, $discount)
     {
@@ -18,6 +20,7 @@ class Product
         $this->title = $title;
         $this->price = $price;
         $this->discount = $discount;
+        $this->storage = new ProductSessionStorage();
     }
 
     /**
@@ -52,5 +55,24 @@ class Product
         return $this->discount;
     }
 
+    public function create()
+    {
+        return $this->storage->create($this);
+    }
+
+    public function destroy()
+    {
+        $this->storage->delete($this->id);
+    }
+
+    public function get()
+    {
+        $this->storage->get($this->id);
+    }
+
+    public function deleteAll()
+    {
+        $this->storage->deleteAll();
+    }
 
 }

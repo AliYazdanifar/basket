@@ -14,13 +14,10 @@ class ProductSessionStorage implements ProductStorageContract
     public function __construct()
     {
         $this->productName = 'product';
-        session_start();
-
     }
 
     public function create(Product $product)
     {
-
         $_SESSION[$this->productName][$product->getId()] = [
             'title' => $product->getTitle(),
             'price' => $product->getPrice(),
@@ -43,12 +40,16 @@ class ProductSessionStorage implements ProductStorageContract
 
     public function get($id)
     {
-        return $_SESSION[$this->productName][$id];
+        if (isset($_SESSION[$this->productName][$id]))
+            return $_SESSION[$this->productName][$id];
+        return [];
     }
 
     public function getAll()
     {
-        return $_SESSION[$this->productName];
+        if (isset($_SESSION[$this->productName]))
+            return $_SESSION[$this->productName];
+        return [];
     }
 
 }
