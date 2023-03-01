@@ -8,7 +8,8 @@ use App\Models\Product;
 
 interface ProductStorageContract
 {
-    public function create(Product $product);
+
+    public function create($id, $title, $price, $discount);
 
     public function delete($id);
 
@@ -17,6 +18,5 @@ interface ProductStorageContract
     public function get($id);
 
     public function getAll();
-
 
 }

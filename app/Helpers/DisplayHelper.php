@@ -4,7 +4,7 @@
 namespace App\Helpers;
 
 
-trait DisplayHelper
+class DisplayHelper
 {
     public function dd($data)
     {

@@ -2,75 +2,47 @@
 
 namespace App\Controllers;
 
-use App\Helpers\DisplayHelper;
 use App\Models\Product;
-use App\Storages\SessionStorage\ProductSessionStorage;
 
 class ProductController
 {
-    use DisplayHelper;
 
-    public $storage;
+    public $product;
 
     public function __construct()
     {
-        $this->storage = new ProductSessionStorage();
+        $this->product = new Product();
     }
 
     public function index()
     {
 
-        $products = $this->storage->getAll();
-
-        $this->dd($products);
+        return $this->product->getAll();
     }
 
-    public function create(Product $product)
+    public function create($id, $title, $price, $discount)
     {
-        $validator = $this->validate($product);
+        $validator = $this->product->validate($title, $price, $discount);
         if (!$validator['status'])
-            $this->dd($validator['msg']);
+            return $validator['msg'];
 
-        return $product->create();
-
-    }
-
-    public function validate(Product $product)
-    {
-
-        if (empty($product->getTitle()) || $product->getTitle() == '' || $product->getTitle() == null)
-            return [
-                'status' => false,
-                'msg' => 'Title cannot be empty.'
-            ];
-
-        if ($product->getPrice() < 0)
-            return [
-                'status' => false,
-                'msg' => 'Negative value is not allowed for price.'
-            ];
-
-        if ($product->getDiscount() < 0)
-            return [
-                'status' => false,
-                'msg' => 'Negative value is not allowed for discount.'
-            ];
-
-        if ($product->getDiscount() > 100)
-            return [
-                'status' => false,
-                'msg' => 'Negative value is not allowed for discount.'
-            ];
-
-        return [
-            'status' => true,
-            'msg' => 'OK'
-        ];
+        return $this->product->create($id, $title, $price, $discount);
 
     }
 
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        $product->destroy();
+        $this->product->destroy($id);
+    }
+
+    public function get($id)
+    {
+        return $this->product->get($id);
+    }
+
+    public function destroyAll()
+    {
+        $this->product->destroyAll();
+
     }
 }
