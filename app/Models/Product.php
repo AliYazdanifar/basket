@@ -133,7 +133,7 @@ class Product
         if ($discount > 100)
             return [
                 'status' => false,
-                'msg' => 'Negative value is not allowed for discount.'
+                'msg' => 'Quantity more than 100 is not allowed for discount.'
             ];
 
         return [
